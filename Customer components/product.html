@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details</title>
+    <link rel="stylesheet" href="../assets/styles/style.css" />
+    
+  </head>
+  <body>
+    <header>
+      <h1>E-Commerce</h1>
+      <nav>
+        <a href="../Pages/customer.html">Back to Products</a>
+        <a href="#" onclick="logout()" class="btn btn-secondary">Logout</a>
+      </nav>
+    </header>
+    <!-- <div class="container">
+      <section class="product-details">
+        <div id="productDetails"></div>
+        <div class="product-actions">
+          <button onclick="addToCart()" class="btn btn-primary">
+            Add to Cart 🛒
+          </button>
+          <button onclick="addToWishlist()" class="btn btn-secondary">
+            Add to Wishlist ❤️
+          </button>
+        </div>
+      </section>
+    </div> -->
+    <div class="card">
+  <div class="card-body">
+    <h3>Product Title</h3>
+    <p>Description for the product that may vary in length.</p>
+
+    <div class="item-actions">
+      <button onclick="addToCart('id')" class="btn btn-primary">🛒 Add to Cart</button>
+      <button onclick="addToWishlist('id')" class="btn btn-secondary">❤️ Add to Wishlist</button>
+    </div>
+  </div>
+</div>
+    <script src="../scripts/firebase-config.js" type="module"></script>
+    <script src="../scripts/auth.js" type="module"></script>
+    <script src="../scripts/product.js" type="module"></script>
+  </body>
+</html>
