@@ -1,5 +1,3 @@
-
-
 /* ===== MODERN E-COMMERCE SYSTEM - PROFESSIONAL DESIGN ===== */
 
 /* Import Google Fonts */
@@ -429,6 +427,7 @@ textarea {
   background: rgba(255, 255, 255, 0.9);
   transition: var(--transition-normal);
   position: relative;
+  width: 100%; /* Ensure inputs take full width of their grid cell */
 }
 
 input:focus,
@@ -787,7 +786,7 @@ button:hover {
   padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 10px;
-  height: 100%; 
+  height: 100%;
 }
 
 .card-body {
@@ -802,7 +801,7 @@ button:hover {
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-end;
-  margin-top: auto; 
+  margin-top: auto;
   padding-top: var(--space-3);
 }
 
@@ -822,7 +821,6 @@ button:hover {
   color: var(--gray-800);
   border: 1px solid var(--gray-200);
 }
-
 
 /* ===== ORDER STATUS STYLES ===== */
 .status-pending {
@@ -919,13 +917,27 @@ button:hover {
   /* Forms */
   form {
     grid-template-columns: 1fr;
-    padding: var(--space-6);
+    padding: var(--space-4);
     margin: var(--space-4);
     max-width: none;
   }
 
   form button {
     grid-column: auto;
+    width: 100%;
+    max-width: 300px; /* Limit button width for better mobile appearance */
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    font-size: 0.95rem; /* Slightly smaller font for mobile */
+    padding: var(--space-3) var(--space-4);
+  }
+
+  textarea {
+    grid-column: auto; /* Ensure textarea spans full width */
   }
 
   /* Lists & Grids */
@@ -996,7 +1008,20 @@ button:hover {
   }
 
   form {
-    padding: var(--space-4);
+    padding: var(--space-3);
+    gap: var(--space-4); /* Reduce gap for smaller screens */
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 0.9rem; /* Further reduce font size for very small screens */
+    padding: var(--space-2) var(--space-3);
+  }
+
+  form button {
+    padding: var(--space-3) var(--space-4);
+    font-size: 0.9rem;
   }
 
   h1 {
