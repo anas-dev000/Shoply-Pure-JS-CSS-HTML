@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="../assets/styles/style.css" />
+    <style>
+ .hero-section {
+  height: 100vh;
+  width: 100%;
+  background: url("../assets/images/WhatsApp\ Image\ 2025-08-05\ at\ 15.14.25_9cbf2dcb.jpg") no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+.hero-section .container {
+  max-width: 800px;
+  z-index: 2;
+  position: relative;
+  color: white;
+  padding: 12px;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.hero-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #0288d1;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.hero-btn:hover {
+  background: #01579b;
+}
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome, <span id="customerName"></span></h1>
+      <nav>
+        <a href="../Customer components/products.html">Products</a>
+        <a href="../Customer components/cart.html">Cart</a>
+        <a href="../Customer components/orders.html">Orders</a>
+        <a href="../Customer components/wishlist.html">Wishlist</a>
+        <a href="../Pages/login.html" onclick="logout()">Logout</a>
+      </nav>
+    </header>
+   <section class="hero-section">
+  <div class="container" style="background-color: transparent; opacity: 0.8;">
+    <h1>Welcome to Our Website</h1>
+    <p>Select an option from the navigation bar to place an order.</p>
+    <a href="../Customer components/products.html" class="hero-btn">SHOP NOW</a>
+  </div>
+</section>
+
+    <script src="../scripts/customer.js" type="module"></script>
+  </body>
+</html>

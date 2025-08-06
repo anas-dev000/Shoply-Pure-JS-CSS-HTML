@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="../assets/styles/style.css" />
+  <script type="module" src="../scripts/firebase-config.js"></script>
+  <script type="module" src="../scripts/auth.js"></script>
+  <style>
+    .admin-hero {
+      height: 100vh;
+      width: 100%;
+      background: linear-gradient(to right, #f0f4f8, #e2e8f0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 40px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .hero-text {
+      flex: 1 1 500px;
+      padding-right: 20px;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      color: #1e293b;
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 1.25rem;
+      color: #475569;
+      margin-bottom: 30px;
+    }
+
+     .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: #3b82f6;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.3s;
+    } 
+
+     .btn:hover {
+      background: #2563eb;
+    } 
+
+    .hero-image {
+      flex: 1 1 400px;
+      text-align: center;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Admin Panel</h1>
+    <nav>
+      <a href="../Admin components/categories.html">Categories</a>
+      <a href="../Admin components/products.html">Products</a>
+      <a href="../Admin components/orders.html">Orders</a>
+      <a href="./login.html" onclick="logout()">Logout</a>
+    </nav>
+  </header>
+  <main>
+    <section class="admin-hero">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Welcome, Admin</h1>
+          <p>Access your dashboard to manage categories, products, and orders efficiently.</p>
+        </div>
+        <div class="hero-image">
+          <img src="../assets/images/Apple_dominiert_Top10_meistverkaufte_Smartphones.jpg" alt="Admin Panel">
+          <img src="../assets/images/gaming-laptops-og-image.png" alt="Admin Panel">
+
+
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
