@@ -104,7 +104,7 @@ onValue(ref(db, "orders"), async (snap) => {
               const prod = prodSnap.exists()
                 ? prodSnap.val()
                 : { name: "Unknown Product" };
-              return `${prod.name} x${item.qty}`;
+              return `${prod.name} (x${item.qty})`;
             }
           } catch (error) {
             console.error("Error fetching product details:", error);

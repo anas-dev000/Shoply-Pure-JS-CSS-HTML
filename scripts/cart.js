@@ -36,7 +36,7 @@ window.renderCart = async function () {
         <div>
           <button onclick="updateCartQty('${item.id}', -1)">-</button>
           <button onclick="updateCartQty('${item.id}', 1)">+</button>
-          <button onclick="removeFromCart('${item.id}')">x</button>
+          <button onclick="removeFromCart('${item.id}')">X</button>
         </div>
       `
       );

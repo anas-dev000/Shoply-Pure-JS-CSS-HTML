@@ -8,7 +8,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { createElement, clearElement } from "../utils/dom.js";
 
-
 const user = JSON.parse(localStorage.getItem("user"));
 if (!user || user.role !== "admin")
   window.location.href = "../Pages/login.html";
@@ -58,6 +57,9 @@ if (orderList) {
         <div class="item-content">
           <h3>Order #${id.substring(0, 8)}</h3>
           <p>Customer: ${data.customer || "Unknown"}</p>
+          <p><strong>Ordered at:</strong> ${new Date(
+            order.timestamp
+          ).toLocaleString()}</p>
           <p>Items: ${itemsSummary}</p>
           <p>Total: $${total.toFixed(2)}</p>
           <p class="${statusClass}">Status: ${data.status || "pending"}</p>
@@ -127,3 +129,4 @@ window.deleteOrder = async function (id) {
     }
   }
 };
+
