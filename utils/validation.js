@@ -23,7 +23,7 @@ export function validateProduct({
 }
 //add
 export function validateUser({ name, email, password, role }) {
-  if (!name || name.trim().length === 0) return "Full name cannot be empty";
+  if (!name || name.trim().length < 3) return "Full name cannot be less than 3 letters";
   if (!/^[a-zA-Z\s]+$/.test(name)) return "Full name must contain only letters and spaces";
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     return "Please enter a valid email address";

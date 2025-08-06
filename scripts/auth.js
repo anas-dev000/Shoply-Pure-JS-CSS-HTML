@@ -59,7 +59,7 @@ if (registerForm) {
       if (snapshot.exists()) return showError("This email is already registered");
       await set(userRef, userData);
       saveUser(userData);
-      redirect(role);
+  window.location.href = "../Pages/login.html";
     } catch (err) {
       showError("Registration failed. Please try again.");
       console.error(err);
