@@ -33,50 +33,58 @@ if (orderList) {
       snapshot.forEach((child) => {
         const data = child.val();
         const id = child.key;
-        const itemsSummary = data.items
-          ? Object.values(data.items)
-              .map((item) => `${item.name} (x${item.qty || 0})`)
-              .join(", ")
-          : "No items";
+      
         const total = data.items
           ? Object.values(data.items).reduce(
               (sum, item) => sum + (item.price || 0) * (item.qty || 0),
               0
             )
           : 0;
+      
         const statusClass =
           data.status === "pending"
             ? "status-pending"
             : data.status === "confirmed"
             ? "status-confirmed"
             : "status-rejected";
+      
+        const itemsList = data.items
+          ? data.items.map(
+              (item) =>
+                `<li>${item.name} => <strong>Quantity:</strong> ${item.qty} — <strong>Price:</strong> $${item.price}</li>`
+            ).join("")
+          : "<li>No items</li>";
+      
         const li = createElement(
           "li",
           { className: "list-item" },
           `
-        <div class="item-content">
-          <h3>Order #${id.substring(0, 8)}</h3>
-          <p>Customer: ${data.customer || "Unknown"}</p>
-          <p><strong>Ordered at:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
-          <p>Items: ${itemsSummary}</p>
-          <p>Total: $${total.toFixed(2)}</p>
-          <p class="${statusClass}">Status: ${data.status || "pending"}</p>
-        </div>
-        <div class="item-actions">
-          ${
-            data.status === "pending"
-              ? `
-              <button onclick="confirmOrder('${id}')" class="btn btn-success"> Confirm</button>
-              <button onclick="rejectOrder('${id}')" class="btn btn-warning"> Reject</button>
-              `
-              : ""
-          }
-          <button onclick="deleteOrder('${id}')" class="btn btn-error"> Delete</button>
-        </div>
-      `
+          <div class="item-content">
+            <h3>Order #${id.substring(0, 8)}</h3>
+            <p><strong>Customer:</strong> ${data.customer || "Unknown"}</p>
+            <p><strong>Ordered at:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
+            <p><strong>Items:</strong></p>
+            <ul>${itemsList}</ul>
+            <p><strong>Total:</strong> $${total.toFixed(2)}</p>
+            <p><strong>Status:</strong> <span class="${statusClass}">${data.status.toUpperCase()}</span></p>
+          </div>
+          <div class="item-actions">
+            ${
+              data.status === "pending"
+                ? `
+                <button onclick="confirmOrder('${id}')" class="btn btn-success"> Confirm</button>
+                <button onclick="rejectOrder('${id}')" class="btn btn-warning"> Reject</button>
+                `
+                : ""
+            }
+            <button onclick="deleteOrder('${id}')" class="btn btn-error"> Delete</button>
+          </div>
+        `
         );
+      
         orderList.appendChild(li);
       });
+      
     },
     (error) => {
       console.error("Error fetching orders:", error);
@@ -107,8 +115,27 @@ window.confirmOrder = async function (id) {
 window.rejectOrder = async function (id) {
   if (confirm("Are you sure you want to reject this order?")) {
     try {
+      const orderSnap = await get(ref(db, `orders/${id}`));
+      if (orderSnap.exists()) {
+        const orderData = orderSnap.val();
+        const items = Array.isArray(orderData.items)
+          ? orderData.items
+          : Object.values(orderData.items || {});
+
+        // إرجاع الكمية للستوك
+        for (const item of items) {
+          const productRef = ref(db, `products/${item.id}`);
+          const prodSnap = await get(productRef);
+          if (prodSnap.exists()) {
+            const prodData = prodSnap.val();
+            const updatedStock = (prodData.stock || 0) + item.qty;
+            await update(productRef, { stock: updatedStock });
+          }
+        }
+      }
+
       await update(ref(db, `orders/${id}`), { status: "rejected" });
-      alert("Order rejected successfully");
+      alert("Order rejected and stock updated");
     } catch (err) {
       alert("Failed to reject order");
       console.error("Error rejecting order:", err);
@@ -116,11 +143,30 @@ window.rejectOrder = async function (id) {
   }
 };
 
+
 window.deleteOrder = async function (id) {
   if (confirm("Are you sure you want to delete this order?")) {
     try {
+      const orderSnap = await get(ref(db, `orders/${id}`));
+      if (orderSnap.exists()) {
+        const orderData = orderSnap.val();
+        const items = Array.isArray(orderData.items)
+          ? orderData.items
+          : Object.values(orderData.items || {});
+
+        for (const item of items) {
+          const productRef = ref(db, `products/${item.id}`);
+          const prodSnap = await get(productRef);
+          if (prodSnap.exists()) {
+            const prodData = prodSnap.val();
+            const updatedStock = (prodData.stock || 0) + item.qty;
+            await update(productRef, { stock: updatedStock });
+          }
+        }
+      }
+
       await remove(ref(db, `orders/${id}`));
-      alert("Order deleted successfully");
+      alert("Order deleted and stock updated");
     } catch (err) {
       alert("Failed to delete order");
       console.error("Error deleting order:", err);
