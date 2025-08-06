@@ -120,7 +120,7 @@ onValue(ref(db, "orders"), async (snap) => {
         <div class="item-content">
           <h3>Order #${order.id.substring(0, 8)}</h3>
           <p><strong>Ordered at:</strong> ${new Date(
-            order.timestamp
+            data.timestamp
           ).toLocaleString()}</p>
           <p><strong>Items:</strong> ${itemDetails.join(", ")}</p>
           <p><strong>Status:</strong> <span class="status-${order.status}">${order.status.toUpperCase()}</span></p>
