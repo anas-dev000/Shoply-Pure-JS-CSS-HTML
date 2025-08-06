@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="../assets/styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Welcome, <span id="customerName"></span></h1>
+      <nav>
+        <a href="./products.html">Products</a>
+        <a href="./cart.html">Cart</a>
+        <a href="./orders.html">Orders</a>
+        <a href="./wishlist.html">Wishlist</a>
+        <a href="../Pages/login.html" onclick="logout()">Logout</a>
+      </nav>
+    </header>
+    <div class="container">
+      <section>
+        <h2>My Cart</h2>
+        <ul id="cartList" class="list-grid"></ul>
+        <button onclick="placeOrder()" class="btn btn-primary">
+          Place Order
+        </button>
+      </section>
+      <ul id="ordersList"></ul>
+
+    </div>
+    <script src="../scripts/firebase-config.js" type="module"></script>
+    <script src="../scripts/auth.js" type="module"></script>
+        <script src="../scripts/cart.js" type="module"></script>
+    <script src="../scripts/order.js" type="module"></script>
+    <script src="../scripts/customer.js" type="module"></script>
+    <script src="../utils/validation.js"type="module"></script></script>
+    <script src="../utils/dom.js"type="module"></script></script>
+  </body>
+</html>
