@@ -57,9 +57,7 @@ if (orderList) {
         <div class="item-content">
           <h3>Order #${id.substring(0, 8)}</h3>
           <p>Customer: ${data.customer || "Unknown"}</p>
-          <p><strong>Ordered at:</strong> ${new Date(
-            order.timestamp
-          ).toLocaleString()}</p>
+          <p><strong>Ordered at:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
           <p>Items: ${itemsSummary}</p>
           <p>Total: $${total.toFixed(2)}</p>
           <p class="${statusClass}">Status: ${data.status || "pending"}</p>
