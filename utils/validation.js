@@ -23,17 +23,13 @@ export function validateProduct({
 }
 //add
 export function validateUser({ name, email, password, role }) {
-if (!name || name.trim().length === 0) {
-    return "Name is required";
-  }
-
-  if (name.trim().length < 3) {
-    return "Name must be at least 3 characters long";
-  }  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    return "Valid email is required";
+  if (!name || name.trim().length === 0) return "Full name cannot be empty";
+  if (!/^[a-zA-Z\s]+$/.test(name)) return "Full name must contain only letters and spaces";
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return "Please enter a valid email address";
   if (!password || password.length < 6)
-    return "Password must be at least 6 characters";
+    return "Password must be at least 6 characters long";
   if (!role || !["admin", "customer"].includes(role))
-    return "Valid role is required";
+    return "Please select a valid role (Admin or Customer)";
   return "";
 }
