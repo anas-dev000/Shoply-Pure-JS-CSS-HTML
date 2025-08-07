@@ -73,7 +73,8 @@ if (productList) {
           "li",
           { className: "list-item" },
           `
-        <img src="${data.image}" alt="${data.name
+        <img src="${data.image}" alt="${
+            data.name
           }" onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
         <div class="item-content">
           <h3>${data.name}</h3>
@@ -135,6 +136,8 @@ window.editProduct = async function (id) {
     const snapshot = await get(ref(db, `products/${id}`));
     if (snapshot.exists()) {
       const data = snapshot.val();
+      const productForm = document.getElementById("productForm");
+      productForm.scrollIntoView({ behavior: "smooth" });
       document.getElementById("productName").value = data.name;
       document.getElementById("productImage").value = data.image;
       document.getElementById("productCategory").value = data.category;

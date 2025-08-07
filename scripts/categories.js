@@ -91,6 +91,8 @@ if (categoryList) {
 }
 
 window.editCategory = function (id, name) {
+  const categoryForm = document.getElementById("categoryForm");
+  categoryForm.scrollIntoView({ behavior: "smooth" });
   document.getElementById("categoryName").value = name;
   document.getElementById("categoryId").value = id;
 };
