@@ -33,3 +33,11 @@ export function validateUser({ name, email, password, role }) {
     return "Please select a valid role (Admin or Customer)";
   return "";
 }
+
+export function validateLogin({ email, password }) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return "Please enter a valid email address";
+  if (!password || password.length < 6)
+    return "Password must be at least 6 characters long";
+  return "";
+}

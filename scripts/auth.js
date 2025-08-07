@@ -1,11 +1,10 @@
-
 import { db } from "./firebase-config.js";
 import {
   ref,
   set,
   get,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { validateUser } from "../utils/validation.js";
+import { validateUser, validateLogin } from "../utils/validation.js";
 
 function showError(msg) {
   const errorDiv = document.getElementById("errorMessage");
@@ -16,8 +15,6 @@ function showError(msg) {
     console.error("Error div not found");
   }
 }
-
-
 
 function saveUser(userData) {
   localStorage.setItem("user", JSON.stringify(userData));
@@ -38,12 +35,11 @@ if (registerNameInput) {
   });
 }
 
-
 const registerForm = document.getElementById("registerForm");
 if (registerForm) {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const errorDiv = document.getElementById("errorMessage"); //ADD
+    const errorDiv = document.getElementById("errorMessage");
     if (errorDiv) errorDiv.classList.remove("show"); // Clear previous errors
     const name = document.getElementById("registerName").value.trim();
     const email = document.getElementById("registerEmail").value.trim();
@@ -54,12 +50,12 @@ if (registerForm) {
     if (error) return showError(error);
     const userId = email.replace(".", "_");
     try {
-      const userRef = ref(db, `users/${userId}`);
+      const userRef = ref(db,` users/${userId}`);
       const snapshot = await get(userRef);
       if (snapshot.exists()) return showError("This email is already registered");
       await set(userRef, userData);
       saveUser(userData);
-  window.location.href = "../Pages/login.html";
+      window.location.href = "../Pages/login.html";
     } catch (err) {
       showError("Registration failed. Please try again.");
       console.error(err);
@@ -67,24 +63,17 @@ if (registerForm) {
   });
 }
 
-
-
 const loginForm = document.getElementById("loginForm");
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const errorDiv = document.getElementById("errorMessage");//ADD
+    const errorDiv = document.getElementById("errorMessage");
     if (errorDiv) errorDiv.classList.remove("show"); // Clear previous errors
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
-    const userData = { name: "", email, password, role: "" };
-    const error = validateUser(userData);
-    if (
-      error &&
-      error !== "Full name cannot be empty" &&
-      error !== "Please select a valid role (Admin or Customer)"
-    )
-      return showError(error);
+    const userData = { email, password };
+    const error = validateLogin(userData);
+    if (error) return showError(error);
     const userId = email.replace(".", "_");
     try {
       const userRef = ref(db, `users/${userId}`);
@@ -102,8 +91,6 @@ if (loginForm) {
   });
 }
 
-
-
 export function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("cart");
@@ -113,4 +100,3 @@ export function logout() {
 
 // Make logout available globally
 window.logout = logout;
-
