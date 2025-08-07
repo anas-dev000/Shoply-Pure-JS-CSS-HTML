@@ -50,9 +50,10 @@ if (registerForm) {
     if (error) return showError(error);
     const userId = email.replace(".", "_");
     try {
-      const userRef = ref(db,` users/${userId}`);
+      const userRef = ref(db, `users/${userId}`);
       const snapshot = await get(userRef);
-      if (snapshot.exists()) return showError("This email is already registered");
+      if (snapshot.exists())
+        return showError("This email is already registered");
       await set(userRef, userData);
       saveUser(userData);
       window.location.href = "../Pages/login.html";
@@ -78,7 +79,8 @@ if (loginForm) {
     try {
       const userRef = ref(db, `users/${userId}`);
       const snapshot = await get(userRef);
-      if (!snapshot.exists()) return showError("No account found with this email");
+      if (!snapshot.exists())
+        return showError("No account found with this email");
       const userData = snapshot.val();
       if (userData.password !== password)
         return showError("Incorrect password");
