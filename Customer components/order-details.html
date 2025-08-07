@@ -1,37 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Order Details</title>
-    <link rel="stylesheet" href="../assets/styles/style.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Welcome, <span id="customerName"></span></h1>
-      <nav>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="orders.html">Orders</a>
-        <a href="wishlist.html">Wishlist</a>
-        <a href="../Pages/login.html" onclick="logout()">Logout</a>
-      </nav>
-    </header>
 
-    <div class="container">
-      <section>
-        <h2>Order Details</h2>
-        <div id="orderDetails" class="order-details-box">
-          Loading...
-        </div>
-      </section>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Details</title>
+  <link rel="stylesheet" href="../assets/styles/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
 
-    <script src="../scripts/firebase-config.js" type="module"></script>
-    <script src="../scripts/auth.js" type="module"></script>
-    <script src="../utils/validation.js" type="module"></script>
-    <script src="../utils/dom.js" type="module"></script>
-    <script src="../scripts/order-details.js" type="module"></script>
-    <script src="../scripts/customer.js" type="module"></script>
-  </body>
+<body>
+  <header>
+    <h1>Welcome, <span id="customerName"></span></h1>
+    <nav>
+      <a href="products.html">Products</a>
+      <a href="cart.html" class="cart-link"><i class="fas fa-shopping-cart"></i><span id="cartCounter">0</span></a>
+      <a href="orders.html">Orders</a>
+      <a href="wishlist.html" class="wishlist-link">Wishlist <span id="wishlistCounter">0</span></a>
+      <a href="../Pages/login.html" onclick="logout()">Logout</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <section>
+      <h2>Order Details</h2>
+      <div id="orderDetails" class="order-details-box">Loading...</div>
+    </section>
+  </div>
+
+  <script src="../scripts/firebase-config.js" type="module"></script>
+  <script src="../scripts/auth.js" type="module"></script>
+  <script src="../utils/validation.js" type="module"></script>
+  <script src="../utils/dom.js" type="module"></script>
+  <script src="../scripts/order-details.js" type="module"></script>
+  <script src="../scripts/customer.js" type="module"></script>
+  <script>
+    function updateCartCounter() {
+      const cartCounterElement = document.getElementById("cartCounter");
+      if (cartCounterElement) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+        cartCounterElement.textContent = totalItems;
+        cartCounterElement.style.display = totalItems > 0 ? "inline-flex" : "none";
+      }
+    }
+    function updateWishlistCounter() {
+      const wishlistCounterElement = document.getElementById("wishlistCounter");
+      if (wishlistCounterElement) {
+        const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+        const totalItems = wishlist.length;
+        wishlistCounterElement.textContent = totalItems;
+        wishlistCounterElement.style.display = totalItems > 0 ? "inline-flex" : "none";
+      }
+    }
+    updateCartCounter();
+    updateWishlistCounter();
+  </script>
+</body>
+
 </html>
