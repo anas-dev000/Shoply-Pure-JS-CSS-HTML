@@ -21,23 +21,42 @@ export function validateProduct({
   if (stock < 0) return "Stock cannot be negative";
   return "";
 }
-//add
+
 export function validateUser({ name, email, password, role }) {
-  if (!name || name.trim().length < 3) return "Full name cannot be less than 3 letters";
-  if (!/^[a-zA-Z\s]+$/.test(name)) return "Full name must contain only letters and spaces";
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    return "Please enter a valid email address";
-  if (!password || password.length < 6)
-    return "Password must be at least 6 characters long";
-  if (!role || !["admin", "customer"].includes(role))
-    return "Please select a valid role (Admin or Customer)";
-  return "";
+  const errors = {};
+
+  if (!name || name.trim().length < 3) {
+    errors.name = "Full name must be at least 3 characters long";
+  } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+    errors.name = "Full name must contain only letters and spaces";
+  }
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.email = "Please enter a valid email address";
+  }
+
+  if (!password || password.length < 6) {
+    errors.password = "Password must be at least 6 characters long";
+  }
+
+  if (!role || !["admin", "customer"].includes(role)) {
+    errors.role = "Please select a valid role (Admin or Customer)";
+  }
+
+  return errors;
 }
 
+
 export function validateLogin({ email, password }) {
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    return "Please enter a valid email address";
-  if (!password || password.length < 6)
-    return "Password must be at least 6 characters long";
-  return "";
+  const errors = {};
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.email = "Please enter a valid email address";
+  }
+
+  if (!password || password.length < 6) {
+    errors.password = "Password must be at least 6 characters long";
+  }
+
+  return errors;
 }
