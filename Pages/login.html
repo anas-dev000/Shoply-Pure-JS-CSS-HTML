@@ -74,7 +74,7 @@
         color: #d32f2f;
         font-size: 0.9rem;
         margin-bottom: 1rem;
-        display: none;
+        /* display: none; */
       }
       .error-message.show {
         display: block;
@@ -109,6 +109,8 @@
             placeholder="Enter your email"
             required
           />
+          <div class="error-message" id="loginEmailError"></div>
+
         </div>
         <div class="form-group">
           <label for="loginPassword">Password</label>
@@ -119,8 +121,10 @@
             placeholder="Enter your password"
             required
           />
+          <div class="error-message" id="loginPasswordError"></div>
+
         </div>
-        <div id="errorMessage" class="error-message"></div>
+        <!-- <div id="errorMessage" class="error-message"></div> -->
         <button type="submit">Login</button>
       </form>
       <div class="register-link">

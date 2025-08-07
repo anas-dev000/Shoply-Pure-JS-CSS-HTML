@@ -1,3 +1,4 @@
+
 import { db } from "./firebase-config.js";
 import {
   ref,
@@ -25,7 +26,6 @@ function redirect(role) {
   else if (role === "customer") window.location.href = "customer.html";
 }
 
-// Restrict username input to letters and spaces
 const registerNameInput = document.getElementById("registerName");
 if (registerNameInput) {
   registerNameInput.addEventListener("keypress", (e) => {
@@ -39,21 +39,50 @@ const registerForm = document.getElementById("registerForm");
 if (registerForm) {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const errorDiv = document.getElementById("errorMessage");
-    if (errorDiv) errorDiv.classList.remove("show"); // Clear previous errors
+
+    ["nameError", "emailError", "passwordError", "roleError"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = "";
+    });
+
     const name = document.getElementById("registerName").value.trim();
     const email = document.getElementById("registerEmail").value.trim();
     const password = document.getElementById("registerPassword").value;
     const role = document.getElementById("registerRole").value;
+
     const userData = { name, email, password, role };
-    const error = validateUser(userData);
-    if (error) return showError(error);
-    const userId = email.replace(".", "_");
+    const errors = validateUser(userData);
+
+    let hasError = false;
+
+    if (errors.name) {
+      document.getElementById("nameError").textContent = errors.name;
+      hasError = true;
+    }
+    if (errors.email) {
+      document.getElementById("emailError").textContent = errors.email;
+      hasError = true;
+    }
+    if (errors.password) {
+      document.getElementById("passwordError").textContent = errors.password;
+      hasError = true;
+    }
+    if (errors.role) {
+      document.getElementById("roleError").textContent = errors.role;
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const userId = email.replace(/\./g, "_");
     try {
       const userRef = ref(db, `users/${userId}`);
       const snapshot = await get(userRef);
-      if (snapshot.exists())
-        return showError("This email is already registered");
+      if (snapshot.exists()) {
+        document.getElementById("emailError").textContent = "This email is already registered";
+        return;
+      }
+
       await set(userRef, userData);
       saveUser(userData);
       window.location.href = "../Pages/login.html";
@@ -68,22 +97,45 @@ const loginForm = document.getElementById("loginForm");
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const errorDiv = document.getElementById("errorMessage");
-    if (errorDiv) errorDiv.classList.remove("show"); // Clear previous errors
+
+    ["loginEmailError", "loginPasswordError"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = "";
+    });
+
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
     const userData = { email, password };
-    const error = validateLogin(userData);
-    if (error) return showError(error);
-    const userId = email.replace(".", "_");
+    const errors = validateLogin(userData);
+
+    let hasError = false;
+
+    if (errors.email) {
+      document.getElementById("loginEmailError").textContent = errors.email;
+      hasError = true;
+    }
+    if (errors.password) {
+      document.getElementById("loginPasswordError").textContent = errors.password;
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const userId = email.replace(/\./g, "_");
     try {
       const userRef = ref(db, `users/${userId}`);
       const snapshot = await get(userRef);
-      if (!snapshot.exists())
-        return showError("No account found with this email");
+      if (!snapshot.exists()) {
+        document.getElementById("loginEmailError").textContent = "No account found with this email";
+        return;
+      }
+
       const userData = snapshot.val();
-      if (userData.password !== password)
-        return showError("Incorrect password");
+      if (userData.password !== password) {
+        document.getElementById("loginPasswordError").textContent = "Incorrect password";
+        return;
+      }
+
       saveUser(userData);
       redirect(userData.role);
     } catch (err) {
@@ -100,5 +152,4 @@ export function logout() {
   window.location.href = "login.html";
 }
 
-// Make logout available globally
 window.logout = logout;

@@ -76,7 +76,7 @@
         color: #d32f2f;
         font-size: 0.9rem;
         margin-bottom: 1rem;
-        display: none;
+        /* display: none; */
       }
       .error-message.show {
         display: block;
@@ -111,6 +111,8 @@
             placeholder="Enter your full name"
             required
           />
+            <div class="error-message" id="nameError"></div>
+
         </div>
         <div class="form-group">
           <label for="registerEmail">Email Address</label>
@@ -121,6 +123,8 @@
             placeholder="Enter your email"
             required
           />
+            <div class="error-message" id="emailError"></div>
+
         </div>
         <div class="form-group">
           <label for="registerPassword">Password</label>
@@ -131,6 +135,8 @@
             placeholder="Enter your password"
             required
           />
+            <div class="error-message" id="passwordError"></div>
+
         </div>
         <div class="form-group">
           <label for="registerRole">Select Role</label>
@@ -139,8 +145,10 @@
             <option value="admin">Admin</option>
             <option value="customer">Customer</option>
           </select>
+            <div class="error-message" id="roleError"></div>
+
         </div>
-        <div id="errorMessage" class="error-message"></div>
+        <!-- <div id="errorMessage" class="error-message"></div> -->
         <button type="submit">Register</button>
       </form>
       <div class="login-link">
@@ -149,5 +157,5 @@
     </div>
     <script src="../scripts/firebase-config.js" type="module"></script>
     <script src="../scripts/auth.js" type="module"></script>
-  </body>
+  </body>
 </html>
