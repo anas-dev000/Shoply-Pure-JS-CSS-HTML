@@ -29,7 +29,7 @@ window.placeOrder = async function () {
         qty: item.qty,
         name: prod.name,
         price: prod.price || 0,
-        currentStock: prod.stock || 0, // هنستخدمه بعدين في الخصم
+        currentStock: prod.stock || 0,
       };
     })
   );
@@ -42,18 +42,13 @@ window.placeOrder = async function () {
   };
 
   try {
-    // 1. حفظ الطلب
     await push(ref(db, "orders"), orderData);
-
-    // 2. خصم الكمية من كل منتج
     for (const item of items) {
       const newStock = item.currentStock - item.qty;
-      if (newStock < 0) continue; // تأمين احتياطي، مش مفروض يحصل بعد التحقق
-
+      if (newStock < 0) continue; 
       await set(ref(db, `products/${item.id}/stock`), newStock);
     }
 
-    // 3. تفريغ الكارت وتحديث الصفحة
     localStorage.removeItem("cart");
     cart.length = 0;
 
@@ -116,17 +111,17 @@ onValue(ref(db, "orders"), async (snap) => {
         order.items.map(async (item) => {
           try {
             if (item.name) {
-              return `${item.name} => <strong>Quantity: ${item.qty}</strong>`;
+              return `${item.name.substring(0, 20)}... `;
             } else {
               const prodSnap = await get(ref(db, `products/${item.id}`));
               const prod = prodSnap.exists()
                 ? prodSnap.val()
                 : { name: "Unknown Product" };
-              return `${prod.name} (x${item.qty})`;
+              return `${prod.name} `;
             }
           } catch (error) {
             console.error("Error fetching product details:", error);
-            return `Unknown Product (x${item.qty})`;
+            return `Unknown Product `;
           }
         })
       );
@@ -141,7 +136,8 @@ onValue(ref(db, "orders"), async (snap) => {
           <p><strong>Items:</strong></p>
           <ul>${itemDetails.map((item) => `<li>${item}</li>`).join("")}</ul>
           <p><strong>Status:</strong> <span class="status-${order.status}">${order.status.toUpperCase()}</span></p>
-        </div>
+          <a href="order-details.html?id=${order.id}" class="btn">show details</a>
+          </div>
       `
       );
 

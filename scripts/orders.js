@@ -111,9 +111,11 @@ window.confirmOrder = async function (id) {
     }
   }
 };
-
 window.rejectOrder = async function (id) {
   if (confirm("Are you sure you want to reject this order?")) {
+    const message = prompt("Enter message to customer about the rejection:");
+    if (message === null) return; 
+
     try {
       const orderSnap = await get(ref(db, `orders/${id}`));
       if (orderSnap.exists()) {
@@ -122,7 +124,6 @@ window.rejectOrder = async function (id) {
           ? orderData.items
           : Object.values(orderData.items || {});
 
-        // إرجاع الكمية للستوك
         for (const item of items) {
           const productRef = ref(db, `products/${item.id}`);
           const prodSnap = await get(productRef);
@@ -134,7 +135,11 @@ window.rejectOrder = async function (id) {
         }
       }
 
-      await update(ref(db, `orders/${id}`), { status: "rejected" });
+      await update(ref(db, `orders/${id}`), {
+        status: "rejected",
+        adminMessage: message,
+      });
+
       alert("Order rejected and stock updated");
     } catch (err) {
       alert("Failed to reject order");
@@ -142,6 +147,7 @@ window.rejectOrder = async function (id) {
     }
   }
 };
+
 
 
 window.deleteOrder = async function (id) {
