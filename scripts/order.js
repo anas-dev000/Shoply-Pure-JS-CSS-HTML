@@ -4,48 +4,66 @@ import {
   push,
   onValue,
   get,
+  set
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { createElement, clearElement } from "../utils/dom.js";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const ordersList = document.getElementById("ordersList");
 
-
 window.placeOrder = async function () {
   if (!user || user.role !== "customer") return;
+
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   if (cart.length === 0) return alert("Cart is empty");
+
   const items = await Promise.all(
     cart.map(async (item) => {
       const prodSnap = await get(ref(db, `products/${item.id}`));
       const prod = prodSnap.exists()
         ? prodSnap.val()
-        : { name: "Unknown Product" };
+        : { name: "Unknown Product", stock: 0, price: 0 };
+
       return {
         id: item.id,
         qty: item.qty,
         name: prod.name,
         price: prod.price || 0,
+        currentStock: prod.stock || 0, // هنستخدمه بعدين في الخصم
       };
     })
   );
+
   const orderData = {
     customer: user.name,
     items,
     status: "pending",
     timestamp: Date.now(),
   };
+
   try {
+    // 1. حفظ الطلب
     await push(ref(db, "orders"), orderData);
-    alert("Order placed!");
+
+    // 2. خصم الكمية من كل منتج
+    for (const item of items) {
+      const newStock = item.currentStock - item.qty;
+      if (newStock < 0) continue; // تأمين احتياطي، مش مفروض يحصل بعد التحقق
+
+      await set(ref(db, `products/${item.id}/stock`), newStock);
+    }
+
+    // 3. تفريغ الكارت وتحديث الصفحة
     localStorage.removeItem("cart");
     cart.length = 0;
-    // Update cart display if function exists
+
     if (typeof window.renderCart === "function") {
       window.renderCart();
     }
-    // Reload page to refresh all displays
+
+    alert("Order placed!");
     window.location.reload();
+debugger;
   } catch (err) {
     alert("Failed to place order");
     console.error(err);
@@ -53,7 +71,7 @@ window.placeOrder = async function () {
 };
 
 onValue(ref(db, "orders"), async (snap) => {
- if (!window.location.pathname.includes("orders.html")) return;
+  if (!window.location.pathname.includes("orders.html")) return;
 
 
   clearElement(ordersList);
@@ -98,7 +116,7 @@ onValue(ref(db, "orders"), async (snap) => {
         order.items.map(async (item) => {
           try {
             if (item.name) {
-              return `${item.name} x${item.qty}`;
+              return `${item.name} => <strong>Quantity: ${item.qty}</strong>`;
             } else {
               const prodSnap = await get(ref(db, `products/${item.id}`));
               const prod = prodSnap.exists()
@@ -108,7 +126,7 @@ onValue(ref(db, "orders"), async (snap) => {
             }
           } catch (error) {
             console.error("Error fetching product details:", error);
-            return `Unknown Product x${item.qty}`;
+            return `Unknown Product (x${item.qty})`;
           }
         })
       );
@@ -119,10 +137,9 @@ onValue(ref(db, "orders"), async (snap) => {
         `
         <div class="item-content">
           <h3>Order #${order.id.substring(0, 8)}</h3>
-          <p><strong>Ordered at:</strong> ${new Date(
-            order.timestamp
-          ).toLocaleString()}</p>
-          <p><strong>Items:</strong> ${itemDetails.join(", ")}</p>
+          <p><strong>Ordered at:</strong> ${new Date(order.timestamp).toLocaleString()}</p>
+          <p><strong>Items:</strong></p>
+          <ul>${itemDetails.map((item) => `<li>${item}</li>`).join("")}</ul>
           <p><strong>Status:</strong> <span class="status-${order.status}">${order.status.toUpperCase()}</span></p>
         </div>
       `
