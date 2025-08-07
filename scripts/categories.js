@@ -3,6 +3,7 @@ import {
   ref,
   set,
   push,
+  get,
   onValue,
   update,
   remove,
@@ -98,13 +99,51 @@ window.editCategory = function (id, name) {
 };
 
 window.deleteCategory = async function (id) {
-  if (confirm("Are you sure you want to delete this category?")) {
-    try {
-      await remove(ref(db, `categories/${id}`));
-      alert("Category deleted successfully");
-    } catch (err) {
-      alert("Failed to delete category");
-      console.error("Error deleting category:", err);
+  try {
+    // First, get the category name
+    const categorySnap = await get(ref(db, `categories/${id}`));
+    if (!categorySnap.exists()) {
+      alert("Category not found");
+      return;
     }
+    const categoryName = categorySnap.val().name;
+
+    // Check for products in this category
+    const productsSnap = await get(ref(db, "products"));
+    const relatedProducts = [];
+
+    if (productsSnap.exists()) {
+      productsSnap.forEach((child) => {
+        if (child.val().category === categoryName) {
+          relatedProducts.push(child.key);
+        }
+      });
+    }
+
+    let confirmMessage = "Are you sure you want to delete this category?";
+    if (relatedProducts.length > 0) {
+      confirmMessage = `Warning: This category contains ${relatedProducts.length} products. Deleting this category will also delete all related products. Are you sure you want to continue?`;
+    }
+
+    if (confirm(confirmMessage)) {
+      // Delete all related products first
+      for (const productId of relatedProducts) {
+        await remove(ref(db, `products/${productId}`));
+      }
+
+      // Then delete the category
+      await remove(ref(db, `categories/${id}`));
+
+      if (relatedProducts.length > 0) {
+        alert(
+          `Category and ${relatedProducts.length} related products deleted successfully`
+        );
+      } else {
+        alert("Category deleted successfully");
+      }
+    }
+  } catch (err) {
+    alert("Failed to delete category");
+    console.error("Error deleting category:", err);
   }
 };
