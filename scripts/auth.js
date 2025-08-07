@@ -50,7 +50,7 @@ if (registerForm) {
     if (error) return showError(error);
     const userId = email.replace(".", "_");
     try {
-      const userRef = ref(db, `users/${userId}`);
+      const userRef = ref(db,` users/${userId}`);
       const snapshot = await get(userRef);
       if (snapshot.exists()) return showError("This email is already registered");
       await set(userRef, userData);
