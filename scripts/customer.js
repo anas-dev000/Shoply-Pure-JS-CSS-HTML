@@ -25,20 +25,24 @@ if (customerNameElement) {
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 if (filterCategory) {
-  onValue(ref(db, "categories"), (snap) => {
-    clearElement(filterCategory);
-    filterCategory.appendChild(
-      createElement("option", { value: "", textContent: "All Categories" })
-    );
-    snap.forEach((child) => {
-      const cat = child.val().name;
+  onValue(
+    ref(db, "categories"),
+    (snap) => {
+      clearElement(filterCategory);
       filterCategory.appendChild(
-        createElement("option", { value: cat, textContent: cat })
+        createElement("option", { value: "", textContent: "All Categories" })
       );
-    });
-  }, (error) => {
-    console.error("Error fetching categories:", error);
-  });
+      snap.forEach((child) => {
+        const cat = child.val().name;
+        filterCategory.appendChild(
+          createElement("option", { value: cat, textContent: cat })
+        );
+      });
+    },
+    (error) => {
+      console.error("Error fetching categories:", error);
+    }
+  );
 } else {
   console.warn("filterCategory element not found in DOM");
 }
@@ -49,35 +53,37 @@ function renderProducts() {
     return;
   }
 
-  onValue(ref(db, "products"), (snap) => {
-    clearElement(productList);
-    const selectedCat = filterCategory ? filterCategory.value : "";
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  onValue(
+    ref(db, "products"),
+    (snap) => {
+      clearElement(productList);
+      const selectedCat = filterCategory ? filterCategory.value : "";
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-    if (!snap.exists()) {
-      productList.appendChild(
-        createElement(
-          "li",
-          { className: "list-item" },
-          `<div class="item-content"><p>No products found.</p></div>`
-        )
-      );
-      return;
-    }
+      if (!snap.exists()) {
+        productList.appendChild(
+          createElement(
+            "li",
+            { className: "list-item" },
+            `<div class="item-content"><p>No products found.</p></div>`
+          )
+        );
+        return;
+      }
 
-    snap.forEach((child) => {
-      const prod = child.val();
-      const id = child.key;
-      const isInWishlist = wishlist.includes(id);
-      if (!selectedCat || prod.category === selectedCat) {
-        const li = createElement(
-          "li",
-          { className: "list-item" },
-          `
+      snap.forEach((child) => {
+        const prod = child.val();
+        const id = child.key;
+        const isInWishlist = wishlist.includes(id);
+        if (!selectedCat || prod.category === selectedCat) {
+          const li = createElement(
+            "li",
+            { className: "list-item" },
+            `
           <a href="./product.html?id=${id}">
             <img src="${prod.image}" alt="${
-            prod.name
-          }" onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+              prod.name
+            }" onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
             <div class="item-content">
               <h3>${prod.name}</h3>
               <p>${prod.category} - $${prod.price.toFixed(2)}</p>
@@ -87,25 +93,29 @@ function renderProducts() {
           </a>
           <div class="item-actions">
             <button onclick="addToCart('${id}')" class="btn btn-success btn-cart">Add to Cart</button>
-            <button onclick="toggleWishlist('${id}')" class="btn btn-primary wishlist-btn ${isInWishlist ? 'wishlist-active' : ''}">
+            <button onclick="toggleWishlist('${id}')" class="btn btn-primary wishlist-btn ${
+              isInWishlist ? "wishlist-active" : ""
+            }">
               <i class="fas fa-heart"></i>
             </button>
           </div>
         `
-        );
-        productList.appendChild(li);
-      }
-    });
-  }, (error) => {
-    console.error("Error fetching products:", error);
-    productList.appendChild(
-      createElement(
-        "li",
-        { className: "list-item" },
-        `<div class="item-content"><p>Error loading products: ${error.message}</p></div>`
-      )
-    );
-  });
+          );
+          productList.appendChild(li);
+        }
+      });
+    },
+    (error) => {
+      console.error("Error fetching products:", error);
+      productList.appendChild(
+        createElement(
+          "li",
+          { className: "list-item" },
+          `<div class="item-content"><p>Error loading products: ${error.message}</p></div>`
+        )
+      );
+    }
+  );
 }
 
 window.addToCart = async function (id) {
@@ -124,6 +134,7 @@ window.addToCart = async function (id) {
     if (typeof window.renderCart === "function") {
       window.renderCart();
     }
+    updateCounters();
   } catch (error) {
     console.error("Error adding to cart:", error);
     alert("Failed to add to cart");
@@ -143,6 +154,7 @@ window.toggleWishlist = function (id) {
       alert("Added to wishlist");
     }
     renderProducts();
+    updateCounters();
   } catch (error) {
     console.error("Error toggling wishlist:", error);
     alert("Failed to update wishlist");

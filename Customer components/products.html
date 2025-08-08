@@ -9,6 +9,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
+    <script src="../scripts/loading.js"></script>
+    <script type="module" src="../scripts/counters.js"></script>
   </head>
   <body>
     <header>
@@ -20,8 +22,10 @@
           ><span id="cartCounter">0</span></a
         >
         <a href="./orders.html">Orders</a>
-<a href="wishlist.html" class="wishlist-link">Wishlist <span id="wishlistCounter">0</span></a>        
-<a href="../Pages/login.html" onclick="logout()">Logout</a>
+        <a href="wishlist.html" class="wishlist-link"
+          >Wishlist <span id="wishlistCounter">0</span></a
+        >
+        <a href="../Pages/login.html" onclick="logout()">Logout</a>
       </nav>
     </header>
     <div class="container">
@@ -41,27 +45,30 @@
     <script src="../utils/dom.js" type="module"></script>
 
     <script src="../scripts/customer.js" type="module"></script>
-<script>
-  function updateCartCounter() {
-    const cartCounterElement = document.getElementById("cartCounter");
-    if (cartCounterElement) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      cartCounterElement.textContent = totalItems;
-      cartCounterElement.style.display = totalItems > 0 ? "inline-flex" : "none";
-    }
-  }
-  function updateWishlistCounter() {
-    const wishlistCounterElement = document.getElementById("wishlistCounter");
-    if (wishlistCounterElement) {
-      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-      const totalItems = wishlist.length;
-      wishlistCounterElement.textContent = totalItems;
-      wishlistCounterElement.style.display = totalItems > 0 ? "inline-flex" : "none";
-    }
-  }
-  updateCartCounter();
-  updateWishlistCounter();
-</script>
+    <script>
+      function updateCartCounter() {
+        const cartCounterElement = document.getElementById("cartCounter");
+        if (cartCounterElement) {
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+          const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+          cartCounterElement.textContent = totalItems;
+          cartCounterElement.style.display =
+            totalItems > 0 ? "inline-flex" : "none";
+        }
+      }
+      function updateWishlistCounter() {
+        const wishlistCounterElement =
+          document.getElementById("wishlistCounter");
+        if (wishlistCounterElement) {
+          const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+          const totalItems = wishlist.length;
+          wishlistCounterElement.textContent = totalItems;
+          wishlistCounterElement.style.display =
+            totalItems > 0 ? "inline-flex" : "none";
+        }
+      }
+      updateCartCounter();
+      updateWishlistCounter();
+    </script>
   </body>
 </html>

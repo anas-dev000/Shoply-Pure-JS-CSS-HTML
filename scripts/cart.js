@@ -5,7 +5,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { createElement, clearElement } from "../utils/dom.js";
 
-
 const cartList = document.getElementById("cartList");
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -39,7 +38,9 @@ window.renderCart = async function () {
           <div class="cart-controls">
             <button onclick="updateCartQty('${item.id}', -1, this)">-</button>
             <strong>Quantity: ${item.qty}</strong>
-            <button onclick="updateCartQty('${item.id}', 1, this)">+</button><br>
+            <button onclick="updateCartQty('${
+              item.id
+            }', 1, this)">+</button><br>
             Delete Item:
             <button onclick="removeFromCart('${item.id}')">🗑️</button>
             <div class="cart-msg" style="color: red; margin-top: 5px;"></div>
@@ -47,13 +48,11 @@ window.renderCart = async function () {
         </div>
         `
       );
-      
-      
+
       cartList.appendChild(li);
     }
   }
 };
-
 
 window.updateCartQty = async function (id, delta, btn) {
   const index = cart.findIndex((i) => i.id === id);
@@ -87,15 +86,15 @@ function showCartMessage(button, message) {
     msgBox.textContent = message;
     setTimeout(() => {
       msgBox.textContent = "";
-    }, 3000); 
+    }, 3000);
   }
 }
-
 
 window.removeFromCart = function (id) {
   cart = cart.filter((i) => i.id !== id);
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
+  updateCounters();
 };
 
 renderCart();

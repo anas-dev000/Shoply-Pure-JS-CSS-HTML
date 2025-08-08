@@ -1,41 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Categories</title>
+    <link rel="stylesheet" href="../assets/styles/style.css" />
+    <script src="../scripts/loading.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel - Categories</title>
-  <link rel="stylesheet" href="../assets/styles/style.css" />
-
-</head>
-
-<body>
-  <header>
-    <h1>Admin Panel</h1>
-    <nav>
-      <a href="./categories.html">Categories</a>
-      <a href="./products.html">Products</a>
-      <a href="./orders.html">Orders</a>
-      <a href="../Pages/login.html" onclick="logout()">Logout</a>
-    </nav>
-  </header>
-  <main class="container">
-    <section>
-      <h2>Manage Categories</h2>
-      <a href="../Pages/admin.html" class="btn btn-secondary">Back to Dashboard</a>
-      <form id="categoryForm">
-        <input type="text" id="categoryName" placeholder="Category Name" required />
-        <input type="hidden" id="categoryId" />
-        <button type="submit" class="btn btn-primary">
-          Add/Update Category
-        </button>
-      </form>
-      <ul id="categoryList" class="list-grid"></ul>
-    </section>
-  </main>
-  <script type="module" src="../scripts/firebase-config.js"></script>
-  <script type="module" src="../scripts/auth.js"></script>
-  <script type="module" src="../scripts/categories.js"></script>
-</body>
-
+  <body>
+    <header>
+      <h1>Admin Panel</h1>
+      <nav>
+        <a href="./categories.html">Categories</a>
+        <a href="./products.html">Products</a>
+        <a href="./orders.html">Orders</a>
+        <a href="../Pages/login.html" onclick="logout()">Logout</a>
+      </nav>
+    </header>
+    <main class="container">
+      <section>
+        <h2>Manage Categories</h2>
+        <a href="../Pages/admin.html" class="btn btn-secondary"
+          >Back to Dashboard</a
+        >
+        <form id="categoryForm">
+          <input
+            type="text"
+            id="categoryName"
+            placeholder="Category Name"
+            required
+          />
+          <input type="hidden" id="categoryId" />
+          <button type="submit" class="btn btn-primary">
+            Add/Update Category
+          </button>
+        </form>
+        <ul id="categoryList" class="list-grid"></ul>
+      </section>
+    </main>
+    <script type="module" src="../scripts/firebase-config.js"></script>
+    <script type="module" src="../scripts/auth.js"></script>
+    <script type="module" src="../scripts/categories.js"></script>
+  </body>
 </html>

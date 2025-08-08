@@ -136,8 +136,7 @@ window.editProduct = async function (id) {
     const snapshot = await get(ref(db, `products/${id}`));
     if (snapshot.exists()) {
       const data = snapshot.val();
-      const productForm = document.getElementById("productForm");
-      productForm.scrollIntoView({ behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.getElementById("productName").value = data.name;
       document.getElementById("productImage").value = data.image;
       document.getElementById("productCategory").value = data.category;
