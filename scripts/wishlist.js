@@ -11,9 +11,7 @@ if (!user || user.role !== "customer") window.location.href = "./login.html";
 const wishlistElement = document.getElementById("wishlist");
 const customerNameElement = document.getElementById("customerName");
 
-if (customerNameElement) {
-  customerNameElement.textContent = user.name;
-}
+if (customerNameElement) customerNameElement.textContent = user.name;
 
 async function renderWishlist() {
   const wish = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -75,18 +73,20 @@ window.addToCart = async function (id) {
   if (index >= 0) cart[index].qty += 1;
   else cart.push({ id, qty: 1 });
   localStorage.setItem("cart", JSON.stringify(cart));
-  alert("Added to cart");
   if (typeof window.renderCart === "function") {
     window.renderCart();
   }
+  window.updateCounters(); // Update counters after adding to cart
+  alert("Added to cart");
 };
 
 window.removeFromWishlist = function (id) {
   const wish = JSON.parse(localStorage.getItem("wishlist")) || [];
   const updatedWish = wish.filter((item) => item !== id);
   localStorage.setItem("wishlist", JSON.stringify(updatedWish));
-  alert("Removed from wishlist");
   renderWishlist();
+  window.updateCounters(); // Update counters after removing item
+  alert("Removed from wishlist");
 };
 
 // Initialize display

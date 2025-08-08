@@ -9,10 +9,7 @@ const cartList = document.getElementById("cartList");
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 window.renderCart = async function () {
-  if (!cartList) {
-    console.warn("#cartList doesn't exsist in the page");
-    return;
-  }
+  if (!cartList) return;
 
   clearElement(cartList);
   if (cart.length === 0) {
@@ -77,6 +74,7 @@ window.updateCartQty = async function (id, delta, btn) {
     if (cart[index].qty <= 0) cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
+    window.updateCounters(); // Update counters after quantity change
   }
 };
 function showCartMessage(button, message) {
@@ -94,7 +92,7 @@ window.removeFromCart = function (id) {
   cart = cart.filter((i) => i.id !== id);
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
-  updateCounters();
+  window.updateCounters(); // Update all counters
 };
 
 renderCart();

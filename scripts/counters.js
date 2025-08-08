@@ -1,22 +1,23 @@
-// Function to update all counters across pages
 function updateCounters() {
-  // Update cart counter
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartCounters = document.querySelectorAll("#cartCounter");
   cartCounters.forEach((counter) => {
     counter.textContent = cart.reduce((total, item) => total + item.qty, 0);
   });
 
-  // Update wishlist counter
   const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
   const wishlistCounters = document.querySelectorAll("#wishlistCounter");
   wishlistCounters.forEach((counter) => {
-    counter.textContent = wishlist.length;
+    const count = wishlist.length;
+    counter.textContent = count;
+    counter.style.display = count > 0 ? "inline-flex" : "none";
   });
 }
 
-// Call updateCounters when the page loads
+window.updateCounters = updateCounters;
 document.addEventListener("DOMContentLoaded", updateCounters);
+window.addEventListener("storage", (e) => {
+  if (e.key === "wishlist" || e.key === "cart") updateCounters();
+});
 
-// Export the function to be used by other modules
 export { updateCounters };
